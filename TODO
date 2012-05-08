@@ -17,6 +17,8 @@ Tasks
     games
   * perhaps a DreamMUD?
 
+* Find all occurances of inversum and change them to dreammud
+
 * Add a custom shell, not a python prompt
   * Integrate code from OpenPIX (commands, autocompletion)
   * Copy OpenPIX shell code into inversum.shell.gameshell
