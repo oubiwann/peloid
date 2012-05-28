@@ -23,6 +23,9 @@ Tasks
   * Integrate code from OpenPIX (commands, autocompletion)
   * Copy OpenPIX shell code into inversum.shell.gameshell
 
+* Support multiple authentication backends via cred (e.g., not just requiring
+  SSH keys)
+
 * Integrate code from Myriad Worlds (moving from room to room)
   * update myriad-worlds to support map types
   * currently, it supports rooms/dungeons
