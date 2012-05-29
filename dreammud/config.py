@@ -16,11 +16,6 @@ main.config.userdir = os.path.expanduser("~/.%s" % meta.library_name)
 main.config.localfile = "config.ini"
 main.config.userfile = "%s/%s" % (main.config.userdir, main.config.localfile)
 
-# Telnet server for account creation
-telnet = Config()
-telnet.servicename = "Telnet Server"
-telnet.port = 4221
-
 # SSH Server for game
 ssh.servicename = meta.description
 ssh.port = 4222
@@ -28,14 +23,14 @@ ssh.keydir = os.path.join(main.config.userdir, "ssh")
 ssh.banner = """:
 : Welcome to
 :
-:   ____                                              __  __  ____      
-:  /\  _`\                                    /'\_/`\/\ \/\ \/\  _`\    
-:  \ \ \/\ \  _ __    __     __      ___ ___ /\      \ \ \ \ \ \ \/\ \  
-:   \ \ \ \ \/\`'__\/'__`\ /'__`\  /' __` __`\ \ \__\ \ \ \ \ \ \ \ \ \ 
-:    \ \ \_\ \ \ \//\  __//\ \L\.\_/\ \/\ \/\ \ \ \_/\ \ \ \_\ \ \ \_\ \
-:     \ \____/\ \_\\ \____\ \__/.\_\ \_\ \_\ \_\ \_\\ \_\ \_____\ \____/
-:      \/___/  \/_/ \/____/\/__/\/_/\/_/\/_/\/_/\/_/ \/_/\/_____/\/___/ 
-:                                                                              
+:   ____                                              __  __  ____
+:  /\  _`\                                    /'\_/`\/\ \/\ \/\  _`\\
+:  \ \ \/\ \  _ __    __     __      ___ ___ /\      \ \ \ \ \ \ \/\ \\
+:   \ \ \ \ \/\`'__\/'__`\ /'__`\  /' __` __`\ \ \__\ \ \ \ \ \ \ \ \ \\
+:    \ \ \_\ \ \ \//\  __//\ \L\.\_/\ \/\ \/\ \ \ \_/\ \ \ \_\ \ \ \_\ \\
+:     \ \____/\ \_\\\\ \____\ \__/.\_\ \_\ \_\ \_\ \_\\\\ \_\ \_____\ \____/
+:      \/___/  \/_/ \/____/\/__/\/_/\/_/\/_/\/_/\/_/ \/_/\/_____/\/___/
+:
 :
 : You have entered a DreamMUD Server.
 : {{HELP}}
@@ -43,6 +38,12 @@ ssh.banner = """:
 : Enjoy!
 :
 """
+
+# Telnet server for account creation
+telnet = Config()
+telnet.servicename = "Telnet Server"
+telnet.ip = ssh.ip
+telnet.port = ssh.port - 1
 
 class DreamMUDConfigurator(Configurator):
     """
@@ -53,8 +54,10 @@ class DreamMUDConfigurator(Configurator):
 
     def buildDefaults(self):
         config = super(DreamMUDConfigurator, self).buildDefaults()
+        config.add_section("Telnet")
         config.set("Telnet", "servicename", self.telnet.servicename)
-        config.set("Telnet", "port", self.telnet.port)
+        config.set("Telnet", "ip", self.telnet.ip)
+        config.set("Telnet", "port", str(self.telnet.port))
         return config
 
     def updateConfig(self):
@@ -62,10 +65,11 @@ class DreamMUDConfigurator(Configurator):
         telnet = self.telnet
         # Telnet
         telnet.servicename = config.get("Telnet", "servicename")
-        telnet.nick = int(config.get("Telnet", "port"))
+        telnet.ip = config.get("Telnet", "ip")
+        telnet.port = int(config.get("Telnet", "port"))
         return config
 
 
 def updateConfig():
-    configurator = DreamMUDConfigurator(main, ssh)
+    configurator = DreamMUDConfigurator(main, ssh, telnet)
     configurator.updateConfig()
