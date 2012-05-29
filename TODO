@@ -11,17 +11,9 @@ Bugs
 Tasks
 -----
 
-* Split out game and game engine?
-  * update myriad-worlds to use DreamSSH?
-  * myriad-worlds is very large in scope, though... designed for full-on RPG
-    games
-  * perhaps a DreamMUD?
-
-* Find all occurances of inversum and change them to dreammud
-
 * Add a custom shell, not a python prompt
   * Integrate code from OpenPIX (commands, autocompletion)
-  * Copy OpenPIX shell code into inversum.shell.gameshell
+  * Copy OpenPIX shell code into dreammud.app.shell.gameshell
 
 * Support multiple authentication backends via cred (e.g., not just requiring
   SSH keys)
