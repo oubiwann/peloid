@@ -1,15 +1,15 @@
-PROJ := inversum-aetatis
-LIB := inversum
+PROJ := dreammud
+LIB := $(PROJ)
 GITHUB_REPO := github.com:dreamhost/$(PROJ).git
 PKG_NAME := $(PROJ)
 TMP_FILE ?= /tmp/MSG
 VIRT_DIR ?= .venv
 
 run:
-	twistd -n inversum
+	twistd -n dreammud
 
 daemon:
-	twistd inversum
+	twistd dreammud
 
 shell:
 	-@ssh -p 6622 127.0.0.1
@@ -21,11 +21,11 @@ test-run:
 	make daemon && make shell && make stop
 
 banner:
-	python -c "from inversum import config; print config.ssh.banner;"
+	python -c "from dreammud import config; print config.ssh.banner;"
 
 generate-config:
 	rm -rf ~/.$(PROJ)/config.ini
-	python -c "from inversum import config; config.writeDefaults();"
+	python -c "from dreammud import config; config.updateConfig();"
 
 log-concise:
 	git log --oneline
