@@ -77,6 +77,6 @@ Tasks
 
 * Provide a service for usres to login anonymously:
   * maybe the lobby?
-  * create a user account (via telnet)
+  * create a user account (via telnet?)
   * choose a class
   * upload SSH keys (via https)
