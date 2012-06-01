@@ -12,14 +12,17 @@ from dreammud import meta
 moduleProvides(interfaces.IConfig)
 
 
-main.config.userdir = os.path.expanduser("~/.%s" % meta.library_name)
+main.config.datadir = os.path.expanduser("~/.%s" % meta.library_name)
 main.config.localfile = "config.ini"
-main.config.userfile = "%s/%s" % (main.config.userdir, main.config.localfile)
+main.config.installedfile = os.path.join(
+    main.config.datadir, main.config.localfile)
 
 # SSH Server for game
 ssh.servicename = meta.description
 ssh.port = 4222
-ssh.keydir = os.path.join(main.config.userdir, "ssh")
+ssh.keydir = os.path.join(main.config.datadir, "ssh")
+ssh.userdirtemplate = os.path.join(main.config.datadir, "users", "{{USER}}")
+ssh.userauthkeys = os.path.join(ssh.userdirtemplate, "authorized_keys")
 ssh.banner = """:
 : Welcome to
 :
@@ -63,14 +66,20 @@ class DreamMUDConfigurator(Configurator):
 
     def updateConfig(self):
         config = super(DreamMUDConfigurator, self).updateConfig()
-        telnet = self.telnet
+        if not config:
+            return
         # Telnet
+        telnet = self.telnet
         telnet.servicename = config.get("Telnet", "servicename")
         telnet.ip = config.get("Telnet", "ip")
         telnet.port = int(config.get("Telnet", "port"))
         return config
 
 
+def configuratorFactory():
+    return DreamMUDConfigurator(main, ssh, telnet)
+
+
 def updateConfig():
-    configurator = DreamMUDConfigurator(main, ssh, telnet)
+    configurator = configuratorFactory()
     configurator.updateConfig()
