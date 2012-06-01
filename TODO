@@ -72,3 +72,9 @@ Tasks
   * create a user account (via telnet?)
   * choose a class
   * upload SSH keys (via https)
+
+* Rooms
+  * these should be like lego blocks: easy to assemble and create structures
+  * rooms should be able to emit sounds and other environmental data (writing
+    to the server instance)
+  * rooms should have randomly discoverable items in them
