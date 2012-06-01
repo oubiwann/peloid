@@ -12,7 +12,7 @@ daemon:
 	twistd dreammud
 
 shell:
-	-@ssh -p 6622 127.0.0.1
+	-@ssh -p 4222 127.0.0.1
 
 stop:
 	kill `cat twistd.pid`
@@ -24,8 +24,7 @@ banner:
 	python -c "from dreammud import config; print config.ssh.banner;"
 
 generate-config:
-	rm -rf ~/.$(PROJ)/config.ini
-	python -c "from dreammud import config; config.updateConfig();"
+	python -c "from dreammud import app;from dreamssh.sdk import scripts;scripts.GenerateConfig();"
 
 log-concise:
 	git log --oneline
