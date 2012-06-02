@@ -78,3 +78,6 @@ Tasks
   * rooms should be able to emit sounds and other environmental data (writing
     to the server instance)
   * rooms should have randomly discoverable items in them
+  * rooms should have the ability to be composed of "areas"
+    * players can enter these areas
+    * the area should support micro environments
