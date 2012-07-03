@@ -4,6 +4,8 @@ GITHUB_REPO := github.com:dreamhost/$(PROJ).git
 PKG_NAME := $(PROJ)
 TMP_FILE ?= /tmp/MSG
 VIRT_DIR ?= .venv
+PYTHON_BIN ?= /System/Library/Frameworks/Python.framework/Versions/2.7/bin
+PYTHON ?= $(PYTHON_BIN)/python2.7
 
 run:
 	twistd -n dreammud
@@ -21,10 +23,10 @@ test-run:
 	make daemon && make shell && make stop
 
 banner:
-	python -c "from dreammud import config; print config.ssh.banner;"
+	$(PYTHON) -c "from dreammud import config; print config.ssh.banner;"
 
 generate-config:
-	python -c "from dreammud import app;from dreamssh.sdk import scripts;scripts.GenerateConfig();"
+	$(PYTHON) -c "from dreammud import app;from dreamssh.sdk import scripts;scripts.GenerateConfig();"
 
 log-concise:
 	git log --oneline
@@ -82,8 +84,8 @@ todo:
 .PHONY: todo
 
 build:
-	python setup.py build
-	python setup.py sdist
+	$(PYTHON) setup.py build
+	$(PYTHON) setup.py sdist
 
 build-docs:
 	cd docs/sphinx; make html
@@ -118,8 +120,7 @@ virtual-build: clean build
 	-test -e $(DIR)/bin/twistd || $(DIR)/bin/pip install twisted
 	-test -e $(DIR)/bin/rst2html.py || $(DIR)/bin/pip install docutils
 	$(DIR)/bin/pip uninstall -vy $(PKG_NAME)
-	rm -rf $(DIR)/lib/python2.7/site-packages/$(PKG_NAME)*
-	$(DIR)/bin/easy_install-2.7 ./dist/$(PKG_NAME)*
+	$(PYTHON_BIN)/easy_install-2.7 ./dist/$(PKG_NAME)*
 
 clean-virt: clean
 	rm -rf $(VIRT_DIR)
@@ -128,7 +129,7 @@ virtual-build-clean: clean-virt build virtual-build
 .PHONY: virtual-build-clean
 
 register:
-	python setup.py register
+	$(PYTHON) setup.py register
 
 upload: check
-	python setup.py sdist upload --show-response
+	$(PYTHON) setup.py sdist upload --show-response
