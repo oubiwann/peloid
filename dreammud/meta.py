@@ -5,9 +5,9 @@ author = "Duncan McGreggor"
 author_email = "dev-community@dreamhost.com"
 license = "MIT"
 url = "http://github.com/dreamhost/dreammud"
-description = "DreamMUD Server"
+description = "Peloid (MUD) Server"
 long_description = """A 100% Python, Twisted-based MUD Server."""
 requires = [
     "twisted",
-    "dreamssh",
+    "carapace",
     ]

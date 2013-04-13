@@ -1,4 +1,4 @@
-DreamMUD Server
-===============
+Peloid (MUD) Server
+===================
 
 More soon!
