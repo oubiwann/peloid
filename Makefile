@@ -1,11 +1,13 @@
 PROJ := peloid
 LIB := $(PROJ)
 GITHUB_REPO := github.com:oubiwann/$(PROJ).git
-PKG_NAME := $(PROJ)
 TMP_FILE ?= /tmp/MSG
 VIRT_DIR ?= .venv
 PYTHON_BIN ?= /System/Library/Frameworks/Python.framework/Versions/2.7/bin
 PYTHON ?= $(PYTHON_BIN)/python2.7
+VERSION ?= $(shell $(PYTHON) -c "from peloid import meta; print meta.version;")
+PACKAGE_NAME ?= $(shell $(PYTHON) -c "from peloid import meta; print meta.display_name;")
+PACKAGE_EXT ?= tar.gz
 
 run:
 	twistd -n peloid
@@ -22,11 +24,14 @@ stop:
 test-run:
 	make daemon && make shell && make stop
 
+version:
+	@echo $(VERSION)
+
 banner:
-	$(PYTHON) -c "from peloid import config; print config.ssh.banner;"
+	@$(PYTHON) -c "from peloid import config; print config.ssh.banner;"
 
 generate-config:
-	$(PYTHON) -c "from peloid import app;from carapace.sdk import scripts;scripts.GenerateConfig();"
+	@$(PYTHON) -c "from peloid import app;from carapace.sdk import scripts;scripts.GenerateConfig();"
 
 log-concise:
 	git log --oneline
@@ -108,19 +113,19 @@ check-integration:
 # placeholder for integration tests
 .PHONY: check-integration
 
-version:
-	@echo $(VERSION)
+virtual-deps:
+	sudo pip install virtualenv
 
 virtual-build: SUB_DIR ?= test-build
 virtual-build: DIR ?= $(VIRT_DIR)/$(SUB_DIR)
-virtual-build: clean build
+virtual-build: clean build virtual-deps
 	mkdir -p $(VIRT_DIR)
 	-test -d $(DIR) || virtualenv $(DIR)
 	@. $(DIR)/bin/activate
 	-test -e $(DIR)/bin/twistd || $(DIR)/bin/pip install twisted
 	-test -e $(DIR)/bin/rst2html.py || $(DIR)/bin/pip install docutils
-	$(DIR)/bin/pip uninstall -vy $(PKG_NAME)
-	$(PYTHON_BIN)/easy_install-2.7 ./dist/$(PKG_NAME)*
+	. $(DIR)/bin/activate && pip install ./dist/$(PACKAGE_NAME)*
+#	$(DIR)/bin/pip uninstall -vy $(PKG_NAME)
 
 clean-virt: clean
 	rm -rf $(VIRT_DIR)
