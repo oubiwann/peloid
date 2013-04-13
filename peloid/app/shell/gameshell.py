@@ -1,5 +1,5 @@
 from carapace.app.shell import base
-from carapace.sdk import registry
+from carapace.sdk import interfaces, registry
 
 
 config = registry.getConfig()
@@ -35,7 +35,7 @@ class TerminalRealm(base.ExecutingTerminalRealm):
         base.ExecutingTerminalRealm.__init__(self, namespace)
 
         def getManhole(serverProtocol):
-            return Manhole(namespace, game)
+            return Manhole(game, namespace)
 
         self.chainedProtocolFactory.protocolFactory = getManhole
 
@@ -47,7 +47,7 @@ class Interpreter(base.Interpreter):
     """
     def runsource(self, input, filename):
         #self.write("input = %s, filename = %s" % (input, filename))
-        self.write(self.game.parseCommand(input))
+        self.write(str(self.game.parseCommand(input)))
 
     def updateNamespace(self, namespace={}):
         pass
