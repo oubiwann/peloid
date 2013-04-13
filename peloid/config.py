@@ -6,7 +6,7 @@ from zope.interface import moduleProvides
 from carapace.config import Config, Configurator, main, ssh
 from carapace.sdk import interfaces
 
-from dreammud import meta
+from peloid import meta
 
 
 moduleProvides(interfaces.IConfig)

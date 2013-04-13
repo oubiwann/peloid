@@ -1,6 +1,6 @@
 from carapace.sdk import registry
 
-from dreammud import config
+from peloid import config
 
 
 config.updateConfig()

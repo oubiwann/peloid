@@ -1,6 +1,6 @@
-PROJ := dreammud
+PROJ := peloid
 LIB := $(PROJ)
-GITHUB_REPO := github.com:dreamhost/$(PROJ).git
+GITHUB_REPO := github.com:oubiwann/$(PROJ).git
 PKG_NAME := $(PROJ)
 TMP_FILE ?= /tmp/MSG
 VIRT_DIR ?= .venv
@@ -8,10 +8,10 @@ PYTHON_BIN ?= /System/Library/Frameworks/Python.framework/Versions/2.7/bin
 PYTHON ?= $(PYTHON_BIN)/python2.7
 
 run:
-	twistd -n dreammud
+	twistd -n peloid
 
 daemon:
-	twistd dreammud
+	twistd peloid
 
 shell:
 	-@ssh -p 4222 127.0.0.1
@@ -23,10 +23,10 @@ test-run:
 	make daemon && make shell && make stop
 
 banner:
-	$(PYTHON) -c "from dreammud import config; print config.ssh.banner;"
+	$(PYTHON) -c "from peloid import config; print config.ssh.banner;"
 
 generate-config:
-	$(PYTHON) -c "from dreammud import app;from carapace.sdk import scripts;scripts.GenerateConfig();"
+	$(PYTHON) -c "from peloid import app;from carapace.sdk import scripts;scripts.GenerateConfig();"
 
 log-concise:
 	git log --oneline

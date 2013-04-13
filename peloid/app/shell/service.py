@@ -4,7 +4,7 @@ from twisted.conch.checkers import SSHPublicKeyDatabase
 
 from carapace.util import ssh as util
 
-from dreammud.app.shell import gameshell, setupshell
+from peloid.app.shell import gameshell, setupshell
 
 
 def getGameShellFactory(**namespace):

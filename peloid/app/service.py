@@ -5,8 +5,8 @@ from twisted.python import usage
 
 from carapace.sdk import const, interfaces, registry, scripts
 
-from dreammud import config, meta
-from dreammud.app.shell.service import getGameShellFactory
+from peloid import config, meta
+from peloid.app.shell.service import getGameShellFactory
 
 
 config = registry.getConfig()

@@ -3,6 +3,6 @@ from twisted.application.service import ServiceMaker
 
 PeloidMUDServer = ServiceMaker(
     "PeloidMUD Server",
-    "dreammud.app.service",
+    "peloid.app.service",
     "A Twisted Python MUD Server ...",
-    "dreammud")
+    "peloid")

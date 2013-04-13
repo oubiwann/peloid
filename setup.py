@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-from dreammud import meta
+from peloid import meta
 
 
 setup(

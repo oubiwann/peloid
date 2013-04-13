@@ -13,7 +13,7 @@ Tasks
 
 * Add a custom shell, not a python prompt
   * Integrate code from OpenPIX (commands, autocompletion)
-  * Copy OpenPIX shell code into dreammud.app.shell.gameshell
+  * Copy OpenPIX shell code into peloid.app.shell.gameshell
 
 * Support multiple authentication backends via cred (e.g., not just requiring
   SSH keys)
