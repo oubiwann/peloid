@@ -4,11 +4,12 @@ from twisted.conch.checkers import SSHPublicKeyDatabase
 
 from carapace.util import ssh as util
 
+from peloid.app import mud
 from peloid.app.shell import gameshell, setupshell
 
 
 def getGameShellFactory(**namespace):
-    game = None
+    game = mud.Game()
     sshRealm = gameshell.TerminalRealm(namespace, game)
     sshPortal = portal.Portal(sshRealm)
     factory = manhole_ssh.ConchFactory(sshPortal)
