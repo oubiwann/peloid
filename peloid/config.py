@@ -35,7 +35,7 @@ ssh.banner = """:
 :      \/___/  \/_/ \/____/\/__/\/_/\/_/\/_/\/_/\/_/ \/_/\/_____/\/___/
 :
 :
-: You have entered a DreamMUD Server.
+: You have entered a PeloidMUD Server.
 : {{HELP}}
 :
 : Enjoy!
@@ -49,15 +49,15 @@ telnet.ip = ssh.ip
 telnet.port = ssh.port - 1
 
 
-class DreamMUDConfigurator(Configurator):
+class PeloidMUDConfigurator(Configurator):
     """
     """
     def __init__(self, main, ssh, telnet):
-        super(DreamMUDConfigurator, self).__init__(main, ssh)
+        super(PeloidMUDConfigurator, self).__init__(main, ssh)
         self.telnet = telnet
 
     def buildDefaults(self):
-        config = super(DreamMUDConfigurator, self).buildDefaults()
+        config = super(PeloidMUDConfigurator, self).buildDefaults()
         config.add_section("Telnet")
         config.set("Telnet", "servicename", self.telnet.servicename)
         config.set("Telnet", "ip", self.telnet.ip)
@@ -65,7 +65,7 @@ class DreamMUDConfigurator(Configurator):
         return config
 
     def updateConfig(self):
-        config = super(DreamMUDConfigurator, self).updateConfig()
+        config = super(PeloidMUDConfigurator, self).updateConfig()
         if not config:
             return
         # Telnet
@@ -77,7 +77,7 @@ class DreamMUDConfigurator(Configurator):
 
 
 def configuratorFactory():
-    return DreamMUDConfigurator(main, ssh, telnet)
+    return PeloidMUDConfigurator(main, ssh, telnet)
 
 
 def updateConfig():
