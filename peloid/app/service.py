@@ -3,7 +3,7 @@ import sys
 from twisted.application import service, internet
 from twisted.python import usage
 
-from dreamssh.sdk import const, interfaces, registry, scripts
+from carapace.sdk import const, interfaces, registry, scripts
 
 from dreammud import config, meta
 from dreammud.app.shell.service import getGameShellFactory

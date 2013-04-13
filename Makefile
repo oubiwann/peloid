@@ -26,7 +26,7 @@ banner:
 	$(PYTHON) -c "from dreammud import config; print config.ssh.banner;"
 
 generate-config:
-	$(PYTHON) -c "from dreammud import app;from dreamssh.sdk import scripts;scripts.GenerateConfig();"
+	$(PYTHON) -c "from dreammud import app;from carapace.sdk import scripts;scripts.GenerateConfig();"
 
 log-concise:
 	git log --oneline
