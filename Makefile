@@ -5,6 +5,7 @@ TMP_FILE ?= /tmp/MSG
 VIRT_DIR ?= .venv
 PYTHON_BIN ?= /System/Library/Frameworks/Python.framework/Versions/2.7/bin
 PYTHON ?= $(PYTHON_BIN)/python2.7
+PYTHON ?= $(shell env python)
 VERSION ?= $(shell $(PYTHON) -c "from peloid import meta; print meta.version;")
 PACKAGE_NAME ?= $(shell $(PYTHON) -c "from peloid import meta; print meta.display_name;")
 PACKAGE_EXT ?= tar.gz
@@ -27,11 +28,16 @@ test-run:
 version:
 	@echo $(VERSION)
 
+banner: SUB_DIR ?= test-build
+banner: DIR ?= $(VIRT_DIR)/$(SUB_DIR)
 banner:
-	@$(PYTHON) -c "from peloid import config; print config.ssh.banner;"
+	@. $(DIR)/bin/activate && python -c "from peloid import config; print config.ssh.banner;"
 
+
+generate-config: SUB_DIR ?= test-build
+generate-config: DIR ?= $(VIRT_DIR)/$(SUB_DIR)
 generate-config:
-	@$(PYTHON) -c "from peloid import app;from carapace.sdk import scripts;scripts.GenerateConfig();"
+	@. $(DIR)/bin/activate && python -c "from peloid import app;from carapace.sdk import scripts;scripts.GenerateConfig();"
 
 log-concise:
 	git log --oneline
