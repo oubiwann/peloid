@@ -12,6 +12,7 @@ from peloid import meta
 moduleProvides(interfaces.IConfig)
 
 
+# Main
 main.config.datadir = os.path.expanduser("~/.%s" % meta.library_name)
 main.config.localfile = "config.ini"
 main.config.installedfile = os.path.join(
