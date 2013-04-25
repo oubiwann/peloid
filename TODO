@@ -15,21 +15,12 @@ Tasks
   * Integrate code from OpenPIX (commands, autocompletion)
   * Copy OpenPIX shell code into peloid.app.shell.gameshell
 
-* Support multiple authentication backends via cred (e.g., not just requiring
-  SSH keys)
 
 * Integrate code from Myriad Worlds (moving from room to room)
   * update myriad-worlds to support map types
   * currently, it supports rooms/dungeons
   * update it to support terrain as well
-
-* Add environment info to status bar/area
-    * Display time, day/night/sun location, weather, month, season, year, etc.
-    * Allow for time multipliers (for slower or faster moving time)
-
-* Support live-updating the game
-  * edit the maps in-game
-  * update room descriptions in-game
+  * Allow for time multipliers (for slower or faster moving time)
 
 * Add support for game roles
   * limit contents of namespace based on role
@@ -81,3 +72,5 @@ Tasks
   * rooms should have the ability to be composed of "areas"
     * players can enter these areas
     * the area should support micro environments
+
+* Add multi-user support
