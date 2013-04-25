@@ -46,6 +46,29 @@ telnet = Config()
 telnet.servicename = "Telnet Server"
 telnet.ip = ssh.ip
 telnet.port = ssh.port - 1
+telnet.banner = """
+Welcome to
+  ____        ___                   __           __  __  ____
+ /\  _`\     /\_ \           __    /\ \  /'\_/`\/\ \/\ \/\  _`\\
+ \ \ \L\ \ __\//\ \     ___ /\_\   \_\ \/\      \ \ \ \ \ \ \/\ \\
+  \ \ ,__/'__`\\\\ \ \   / __`\/\ \  /'_` \ \ \__\ \ \ \ \ \ \ \ \ \\
+   \ \ \/\  __/ \_\ \_/\ \L\ \ \ \/\ \L\ \ \ \_/\ \ \ \_\ \ \ \_\ \\
+    \ \_\ \____\/\____\ \____/\ \_\ \___,_\ \_\\\\ \_\ \_____\ \____/
+     \/_/\/____/\/____/\/___/  \/_/\/__,_ /\/_/ \/_/\/_____/\/___/
+
+You have connected to a Peloid registration server.
+
+"""
+telnet.registration = """
+------------------------------------------------------------------------------
+  "register <email@address> <SSH keys URL>" sets up an ssh account for you.
+  "WHO" tells you who is logged in to the game (case sensitive).
+  "QUIT" exits the game and saves your character.
+  "news" informs you about recent program changes and items of interest.
+  "help" gives help on the commands, "help commands" for a list.
+------------------------------------------------------------------------------
+
+"""
 
 
 class PeloidMUDConfigurator(Configurator):
