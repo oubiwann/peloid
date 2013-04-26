@@ -7,9 +7,11 @@ Peloid (MUD) Server
 Running the MUD
 ---------------
 
-First, install MongoDB for your system.
+First, install MongoDB for your system, then start it up::
 
-Download the code::
+    $ mongod
+
+In another terminal, download the code::
 
     $ git clone https://github.com/oubiwann/peloid.git
 
