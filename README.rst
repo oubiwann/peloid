@@ -58,11 +58,16 @@ Now you can register::
 
     > register myemail@host.com https://launchpad.net/~mynick/+sshkeys
 
+or::
+
+    > register myemail@host.com https://api.github.com/users/mynick/keys
+
 
 Logging in to the Game Server
 -----------------------------
 
-Once you have your ssh keys saved on the server, you will be able to login::
+Once you have your ssh keys saved on the server (done automatically when you
+register), you will be able to login::
 
     $ ssh -p 4222 your.mudhost.com
 
