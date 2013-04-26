@@ -19,6 +19,9 @@ daemon:
 shell:
 	-@ssh -p 4222 127.0.0.1
 
+telnet:
+	@telnet localhost 4221
+
 stop:
 	kill `cat twistd.pid`
 
