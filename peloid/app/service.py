@@ -6,7 +6,7 @@ from twisted.python import usage
 from carapace.sdk import const, interfaces, registry, scripts
 
 from peloid import config, meta
-from peloid.app.shell.service import getGameShellFactory
+from peloid.app.shell.service import getGameShellFactory, getSetupShellFactory
 
 
 config = registry.getConfig()
@@ -55,8 +55,8 @@ def makeService(options):
     sshServer.setName(config.ssh.servicename)
     sshServer.setServiceParent(services)
     # setup telnet for creating user accounts
-    #telnetFactory = getSetupShellFactory()
-    #telnetServer = internet.TCPServer(config.telnet.port, telnetFactory)
-    #telnetServer.setName(config.telnet.servicename)
-    #telnetServer.setServiceParent(services)
+    telnetFactory = getSetupShellFactory()
+    telnetServer = internet.TCPServer(config.telnet.port, telnetFactory)
+    telnetServer.setName(config.telnet.servicename)
+    telnetServer.setServiceParent(services)
     return services

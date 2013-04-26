@@ -1,5 +1,4 @@
 from twisted.cred import portal
-from twisted.conch import manhole_ssh
 from twisted.conch.checkers import SSHPublicKeyDatabase
 
 from carapace.util import ssh as util
@@ -12,7 +11,7 @@ def getGameShellFactory(**namespace):
     game = mud.Game()
     sshRealm = gameshell.TerminalRealm(namespace, game)
     sshPortal = portal.Portal(sshRealm)
-    factory = manhole_ssh.ConchFactory(sshPortal)
+    factory = gameshell.GameShellFactory(sshPortal)
     factory.privateKeys = {'ssh-rsa': util.getPrivKey()}
     factory.publicKeys = {'ssh-rsa': util.getPubKey()}
     factory.portal.registerChecker(SSHPublicKeyDatabase())
@@ -20,6 +19,4 @@ def getGameShellFactory(**namespace):
 
 
 def getSetupShellFactory(**namespace):
-    #telnetRealm = setupshell.X
-    #telnetPortal = portal.Portal(telnetRealm)
-    pass
+    return setupshell.SetupShellServerFactory(namespace)
