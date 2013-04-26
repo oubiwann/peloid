@@ -1,3 +1,5 @@
+from twisted.conch import manhole_ssh
+
 from carapace.app.shell import base
 from carapace.sdk import interfaces, registry
 
@@ -75,3 +77,8 @@ class Manhole(base.MOTDColoredManhole):
 
     def updateNamespace(self, namespace={}):
         self.interpreter.updateNamespace(namespace)
+
+
+class GameShellFactory(manhole_ssh.ConchFactory):
+    """
+    """
