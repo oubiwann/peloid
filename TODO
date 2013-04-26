@@ -72,5 +72,3 @@ Tasks
   * rooms should have the ability to be composed of "areas"
     * players can enter these areas
     * the area should support micro environments
-
-* Add multi-user support
