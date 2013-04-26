@@ -62,13 +62,13 @@ You have connected to a Peloid registration server.
 telnet.registration = """
 ------------------------------------------------------------------------------
   "register <email@address> <SSH keys URL>" sets up an ssh account for you.
-  "WHO" tells you who is logged in to the game (case sensitive).
-  "QUIT" exits the game and saves your character.
-  "news" informs you about recent program changes and items of interest.
+  "who" tells you who is logged in to the game.
+  "quit" signs you off of the registration server.
   "help" gives help on the commands, "help commands" for a list.
 ------------------------------------------------------------------------------
 
 """
+telnet.prompt = "> "
 
 
 class PeloidMUDConfigurator(Configurator):
