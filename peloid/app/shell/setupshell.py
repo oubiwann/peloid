@@ -4,6 +4,8 @@ from twisted.protocols.basic import LineReceiver
 
 from carapace.sdk import interfaces, registry
 
+from peloid.app import register
+
 
 config = registry.getConfig()
 
@@ -24,6 +26,9 @@ class ExecutingShell(TelnetProtocol):
         raise NotImplementedError
 
     def execCommand(self, args):
+        if not args:
+            self.prompt()
+            return
         cmd = args[0]
         params = args[1:]
         if not params:
@@ -31,6 +36,8 @@ class ExecutingShell(TelnetProtocol):
         try:
             self._processShellCommand(cmd, params)
         except Exception, error:
+            # debug XXX
+            #self.write(error)
             commandInput = "%s %s" % (cmd, " ".join(params))
             errorParts = error.message.split()
             if errorParts[0].startswith("telnet_"):
@@ -49,6 +56,9 @@ class ExecutingShell(TelnetProtocol):
 class SetupShell(ExecutingShell):
     """
     """
+        # XXX this class (or a parent class) needs to set some variables for
+        # the services that are running on the server so that the game data can
+        # be accesses, introspected, and reported upon
     def connectionMade(self):
         self.write(config.telnet.banner)
         self.telnet_help()
@@ -56,9 +66,19 @@ class SetupShell(ExecutingShell):
     def _processShellCommand(self, cmd, args):
         getattr(self, "telnet_%s" % cmd)(*args)
 
+    def notifyWhenComplete(self, results):
+        self.write("\n\nUser created successfully!\n\n")
+        self.prompt()
+
+    def reportError(self, reason):
+        self.write("\n\nThere was an error: %s\n\n" % str(reason))
+
     def telnet_register(self, email, sshKeysURL):
-        self.write(
-            "\n\nin telnet_register got: %s and %s\n\n" % (email, sshKeysURL))
+        signUp = register.Registration(email, sshKeysURL)
+        d = signUp.run()
+        d.addCallback(self.notifyWhenComplete)
+        d.addErrback(self.reportError)
+        self.prompt()
 
     def telnet_who(self, *args):
         self.write("\n\nService not yet implemented.\n\n")
@@ -67,9 +87,13 @@ class SetupShell(ExecutingShell):
         self.write(config.telnet.bye)
         self.transport.loseConnection()
 
+    telnet_q = telnet_quit
+
     def telnet_help(self, *args):
         self.write(config.telnet.registration)
         self.prompt()
+
+    telnet_h = telnet_help
 
 
 class SetupShellTransport(TelnetTransport):
