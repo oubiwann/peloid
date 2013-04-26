@@ -9,6 +9,7 @@ description = "Peloid (MUD) Server"
 long_description = """A 100% Python, Twisted-based MUD Server."""
 requires = [
     "twisted",
-    "carapace",
     "pyopenssl",
+    "carapace",
+    "txmongo",
     ]
