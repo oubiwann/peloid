@@ -12,7 +12,7 @@ class ExecutingShell(TelnetProtocol):
     """
     """
     def write(self, data):
-        self.transport.write(data)
+        self.transport.write(str(data))
 
     def prompt(self):
         self.write(config.telnet.prompt)
@@ -61,10 +61,11 @@ class SetupShell(ExecutingShell):
             "\n\nin telnet_register got: %s and %s\n\n" % (email, sshKeysURL))
 
     def telnet_who(self, *args):
-        pass
+        self.write("\n\nService not yet implemented.\n\n")
 
     def telnet_quit(self, *args):
-        self.write(dir(self))
+        self.write(config.telnet.bye)
+        self.transport.loseConnection()
 
     def telnet_help(self, *args):
         self.write(config.telnet.registration)

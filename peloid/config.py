@@ -69,6 +69,7 @@ telnet.registration = """
 
 """
 telnet.prompt = "> "
+telnet.bye = "\n\nQuitting registration server...\nGood-bye!\n\n"
 
 
 class PeloidMUDConfigurator(Configurator):
