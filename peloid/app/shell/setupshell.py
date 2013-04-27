@@ -56,9 +56,9 @@ class ExecutingShell(TelnetProtocol):
 class SetupShell(ExecutingShell):
     """
     """
-        # XXX this class (or a parent class) needs to set some variables for
-        # the services that are running on the server so that the game data can
-        # be accesses, introspected, and reported upon
+    # XXX this class (or a parent class) needs to set some variables for
+    # the services that are running on the server so that the game data can
+    # be accesses, introspected, and reported upon
     def connectionMade(self):
         self.write(config.telnet.banner)
         self.telnet_help()
