@@ -1,4 +1,4 @@
-from ConfigParser import SafeConfigParser
+from ConfigParser import SafeConfigParser, NoSectionError
 import os
 
 from zope.interface import moduleProvides
@@ -19,6 +19,7 @@ main.config.installedfile = os.path.join(
     main.config.datadir, main.config.localfile)
 
 # Database
+db = Config()
 db.name = "peloid"
 db.usercollection = "user-data"
 db.gamecollection = "game-data"
@@ -80,7 +81,7 @@ telnet.bye = "\n\nQuitting registration server...\nGood-bye!\n\n"
 class PeloidMUDConfigurator(Configurator):
     """
     """
-    def __init__(self, main, ssh, telnet):
+    def __init__(self, main, db, ssh, telnet):
         super(PeloidMUDConfigurator, self).__init__(main, ssh)
         self.db = db
         self.telnet = telnet
@@ -95,6 +96,10 @@ class PeloidMUDConfigurator(Configurator):
         config.set("Telnet", "servicename", self.telnet.servicename)
         config.set("Telnet", "ip", self.telnet.ip)
         config.set("Telnet", "port", str(self.telnet.port))
+        config.set("Telnet", "banner", self.telnet.banner)
+        config.set("Telnet", "registration", self.telnet.registration)
+        config.set("Telnet", "prompt", self.telnet.prompt)
+        config.set("Telnet", "bye", self.telnet.bye)
         return config
 
     def updateConfig(self):
@@ -111,13 +116,21 @@ class PeloidMUDConfigurator(Configurator):
         telnet.servicename = config.get("Telnet", "servicename")
         telnet.ip = config.get("Telnet", "ip")
         telnet.port = int(config.get("Telnet", "port"))
+        telnet.banner = config.get("Telnet", "banner")
+        telnet.registration = config.get("Telnet", "registration")
+        telnet.prompt = config.get("Telnet", "prompt")
+        telnet.bye = config.get("Telnet", "bye")
         return config
 
 
 def configuratorFactory():
-    return PeloidMUDConfigurator(main, ssh, telnet)
+    return PeloidMUDConfigurator(main, db, ssh, telnet)
 
 
 def updateConfig():
     configurator = configuratorFactory()
-    configurator.updateConfig()
+    try:
+        configurator.updateConfig()
+    except NoSectionError:
+        print ("It seems like your config file is stale; "
+               "you should generate a new one.")
