@@ -18,6 +18,11 @@ main.config.localfile = "config.ini"
 main.config.installedfile = os.path.join(
     main.config.datadir, main.config.localfile)
 
+# Database
+db.name = "peloid"
+db.usercollection = "user-data"
+db.gamecollection = "game-data"
+
 # SSH Server for game
 ssh.servicename = meta.description
 ssh.port = 4222
@@ -77,10 +82,15 @@ class PeloidMUDConfigurator(Configurator):
     """
     def __init__(self, main, ssh, telnet):
         super(PeloidMUDConfigurator, self).__init__(main, ssh)
+        self.db = db
         self.telnet = telnet
 
     def buildDefaults(self):
         config = super(PeloidMUDConfigurator, self).buildDefaults()
+        config.add_section("Database")
+        config.set("Database", "name", self.db.name)
+        config.set("Database", "usercollection", self.db.usercollection)
+        config.set("Database", "gamecollection", self.db.gamecollection)
         config.add_section("Telnet")
         config.set("Telnet", "servicename", self.telnet.servicename)
         config.set("Telnet", "ip", self.telnet.ip)
@@ -91,6 +101,11 @@ class PeloidMUDConfigurator(Configurator):
         config = super(PeloidMUDConfigurator, self).updateConfig()
         if not config:
             return
+        # Database
+        db = self.db
+        db.name = config.get("Database", "name")
+        db.usercollection = config.get("Database", "usercollection")
+        db.gamecollection = config.get("Database", "gamecollection")
         # Telnet
         telnet = self.telnet
         telnet.servicename = config.get("Telnet", "servicename")
