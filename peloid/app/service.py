@@ -59,4 +59,8 @@ def makeService(options):
     telnetServer = internet.TCPServer(config.telnet.port, telnetFactory)
     telnetServer.setName(config.telnet.servicename)
     telnetServer.setServiceParent(services)
+    # set up smtp for sending out registration emails
+    # XXX add code
+    # set up http for verifying registration from emails
+    # XXX add code
     return services
