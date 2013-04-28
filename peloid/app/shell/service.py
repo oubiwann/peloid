@@ -8,6 +8,14 @@ from peloid.app.shell import gameshell, setupshell
 
 
 def getGameShellFactory(**namespace):
+    """
+    The "namespace" kwargs here contains the passed objects that will be
+    accessible via the shell, namely:
+     * "app"
+     * "services"
+
+    These two are passed in the call to peloid.app.service.makeService.
+    """
     game = mud.Game()
     sshRealm = gameshell.TerminalRealm(namespace, game)
     sshPortal = portal.Portal(sshRealm)
