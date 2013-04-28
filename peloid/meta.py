@@ -12,4 +12,5 @@ requires = [
     "pyopenssl",
     "carapace",
     "txmongo",
+    "txmongomodel",
     ]
