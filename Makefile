@@ -24,7 +24,7 @@ run: $(VENV) $(KEY_DIR)
 	. $(ACT) && twistd -n peloid
 
 daemon: $(VENV) $(KEY_DIR)
-	. $(ACT) twistd peloid
+	. $(ACT) && twistd peloid
 
 shell: $(VENV) $(KEY_DIR)
 	. $(ACT) && ssh -o StrictHostKeyChecking=no -p 4222 127.0.0.1
