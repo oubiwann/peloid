@@ -9,15 +9,25 @@ PYTHON ?= $(shell env python)
 VERSION ?= $(shell $(PYTHON) -c "from peloid import meta; print meta.version;")
 PACKAGE_NAME ?= $(shell $(PYTHON) -c "from peloid import meta; print meta.display_name;")
 PACKAGE_EXT ?= tar.gz
+VENV ?= .venv
+ACT ?= $(VENV)/bin/activate
+KEY_DIR ?= $(shell . $(ACT) && python -c "from peloid import config;print config.ssh.keydir;")
 
-run:
-	twistd -n peloid
+$(KEY_DIR):
+	. $(ACT) && twistd peloid keygen
 
-daemon:
-	twistd peloid
+$(VENV):
+	virtualenv $(VENV)
+	. $(ACT) && pip install carapace
 
-shell:
-	-@ssh -p 4222 127.0.0.1
+run: $(VENV) $(KEY_DIR)
+	. $(ACT) && twistd -n peloid
+
+daemon: $(VENV) $(KEY_DIR)
+	. $(ACT) twistd peloid
+
+shell: $(VENV) $(KEY_DIR)
+	. $(ACT) && ssh -o StrictHostKeyChecking=no -p 4222 127.0.0.1
 
 telnet:
 	@telnet localhost 4221
