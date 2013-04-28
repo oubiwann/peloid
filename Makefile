@@ -18,22 +18,28 @@ $(KEY_DIR):
 
 $(VENV):
 	virtualenv $(VENV)
-	. $(ACT) && pip install carapace
 
-run: $(VENV) $(KEY_DIR)
+deps:
+	. $(ACT) && pip install carapace
+	. $(ACT) && pip install txmongomodel
+
+run: $(VENV) $(KEY_DIR) deps
 	. $(ACT) && twistd -n peloid
 
-daemon: $(VENV) $(KEY_DIR)
-	. $(ACT) && twistd peloid
+daemon: $(VENV) $(KEY_DIR) deps
+	@echo "Starting daemon ..."
+	@. $(ACT) && twistd peloid
 
 shell: $(VENV) $(KEY_DIR)
-	. $(ACT) && ssh -o StrictHostKeyChecking=no -p 4222 127.0.0.1
+	@echo "Starting shell ..."
+	@. $(ACT) && ssh -o StrictHostKeyChecking=no -p 4222 127.0.0.1
 
 telnet:
 	@telnet localhost 4221
 
 stop:
-	kill `cat twistd.pid`
+	@echo "Stopping daemon ..."
+	@kill `cat twistd.pid`
 
 test-run:
 	make daemon && make shell && make stop
@@ -47,10 +53,8 @@ banner:
 	@. $(DIR)/bin/activate && python -c "from peloid import config; print config.ssh.banner;"
 
 
-generate-config: SUB_DIR ?= test-build
-generate-config: DIR ?= $(VIRT_DIR)/$(SUB_DIR)
-generate-config:
-	@. $(DIR)/bin/activate && python -c "from peloid import app;from carapace.sdk import scripts;scripts.GenerateConfig();"
+generate-config: $(ENV)
+	@. $(ACT) && python -c "from peloid import app;from carapace.sdk import scripts;scripts.GenerateConfig();"
 
 log-concise:
 	git log --oneline
