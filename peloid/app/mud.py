@@ -4,5 +4,5 @@ class Game(object):
     def start(self, *args, **kwargs):
         pass
 
-    def parseCommand(self, *args,  **kwargs):
-        return {"args": args, "kwargs": kwargs}
+    def parseCommand(self, *args):
+        return {"args": args}
