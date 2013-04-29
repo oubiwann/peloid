@@ -3,6 +3,7 @@ from twisted.conch.checkers import SSHPublicKeyDatabase
 
 from carapace.util import ssh as util
 
+from peloid import const
 from peloid.app import mud
 from peloid.app.shell import gameshell, setupshell
 
@@ -17,6 +18,7 @@ def getGameShellFactory(**namespace):
     These two are passed in the call to peloid.app.service.makeService.
     """
     game = mud.Game()
+    game.setMode(const.modes.lobby)
     sshRealm = gameshell.TerminalRealm(namespace, game)
     sshPortal = portal.Portal(sshRealm)
     factory = gameshell.GameShellFactory(sshPortal)
