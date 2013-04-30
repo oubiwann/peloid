@@ -29,6 +29,9 @@ class CommandParser(object):
 
     def cmd_look(self, at=""):
         # XXX get room description
+        # XXX do a lookup on all contents in the room:
+        #   if the first word in "at" is in the contents,
+        #       do a lookup on that item and get is desc
         return "You look around..."
 
 
