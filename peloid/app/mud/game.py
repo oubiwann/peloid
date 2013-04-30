@@ -4,58 +4,6 @@ from peloid import const
 from peloid.app.mud import parser, room, world
 
 
-class HallOfHalls(Hall):
-    """
-    """
-
-
-class HallOfCreators(Hall):
-    """
-    """
-
-
-class HallOfControllers(Hall):
-    """
-    """
-
-
-class HallOfAvatars(Hall):
-    """
-    """
-
-
-class HallOfViewing(Hall):
-    """
-    """
-
-
-class HallOfBanality(Hall):
-    """
-    """
-
-
-class MetaWorld(World):
-    """
-    The game metaworld contains the following rooms:
-
-
-                                Game World
-                                     |
-              Hall of Contorllers    |    Hall of Viewing
-                      |              |          |
-    Hall of Creators  |      Hall of Avatars    |    Hall of Banality
-            |         |              |          |           |
-            |         |              |          |           |
-            +---------+--------------+----------+-----------+
-                                     |
-                               Hall of Halls
-
-    From these rooms, one is able to interact with the game world in several
-    different and separate ways.
-    """
-    graph = {}
-
-
 class Game(object):
     """
     """
