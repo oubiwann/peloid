@@ -7,7 +7,9 @@ from peloid.app.mud import parser
 class Game(object):
     """
     """
-    def __init__(self):
+    def __init__(self, gameFile=None):
+        self.gameFile = gameFile
+        # XXX also, load game here
         self.mode = None
         self.parser = None
 
@@ -54,3 +56,9 @@ class Game(object):
 
     def parseCommand(self, input):
         return self.parser.parseCommand(input)
+
+    def setInterpreter(self, interpreter):
+        """
+        This is inteded to be called by gameshell.Manhole.setInterpreter.
+        """
+        self.interpreter = interpreter

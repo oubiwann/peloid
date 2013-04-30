@@ -16,3 +16,7 @@ modes.chat = 7
 cmds = Organizer()
 cmds.look = ["look", "view", "observe"]
 cmds.go = ["walk", "move", "go"]
+
+# Options
+gamefileLongOption = "gamefile"
+gamefileShortOption = "g"

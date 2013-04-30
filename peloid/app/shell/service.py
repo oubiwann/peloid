@@ -4,11 +4,11 @@ from twisted.conch.checkers import SSHPublicKeyDatabase
 from carapace.util import ssh as util
 
 from peloid import const
-from peloid.app import mud
+from peloid.app.mud import game
 from peloid.app.shell import gameshell, setupshell
 
 
-def getGameShellFactory(**namespace):
+def getGameShellFactory(gameFile=None, **namespace):
     """
     The "namespace" kwargs here contains the passed objects that will be
     accessible via the shell, namely:
@@ -17,9 +17,9 @@ def getGameShellFactory(**namespace):
 
     These two are passed in the call to peloid.app.service.makeService.
     """
-    game = mud.Game()
-    game.setMode(const.modes.lobby)
-    sshRealm = gameshell.TerminalRealm(namespace, game)
+    gameInstance = game.Game(gameFile)
+    gameInstance.setMode(const.modes.lobby)
+    sshRealm = gameshell.TerminalRealm(namespace, gameInstance)
     sshPortal = portal.Portal(sshRealm)
     factory = gameshell.GameShellFactory(sshPortal)
     factory.privateKeys = {'ssh-rsa': util.getPrivKey()}

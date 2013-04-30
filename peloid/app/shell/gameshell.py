@@ -15,7 +15,12 @@ class SessionTransport(base.TerminalSessionTransport):
     """
     """
     def getHelpHint(self):
-        return BANNER_HELP
+        msg = BANNER_HELP
+        if self.game:
+            msg += ("\n:\n: WARNING! You seem to have not provided a game "
+                    "file with a command-line\n: option. To create a new "
+                    "world, enter the Hall of Creators.")
+        return msg
 
 
 class TerminalSession(base.ExecutingTerminalSession):
@@ -26,6 +31,9 @@ class TerminalSession(base.ExecutingTerminalSession):
     def _processShellCommand(self, cmd, namespace):
         pass
 
+    def openShell(self, proto):
+        base.ExecutingTerminalSession.openShell(self, proto)
+
 
 class TerminalRealm(base.ExecutingTerminalRealm):
     """
@@ -35,6 +43,7 @@ class TerminalRealm(base.ExecutingTerminalRealm):
 
     def __init__(self, namespace, game):
         base.ExecutingTerminalRealm.__init__(self, namespace)
+        self.transportFactory.game = game
 
         def getManhole(serverProtocol):
             return Manhole(game, namespace)
@@ -51,6 +60,9 @@ class Interpreter(base.Interpreter):
         #self.write("input = %s, filename = %s" % (input, filename))
         self.write(str(self.game.parseCommand(input)))
 
+    def setGame(self, game):
+        self.game = game
+
     def updateNamespace(self, namespace={}):
         pass
 
@@ -63,13 +75,15 @@ class Manhole(base.MOTDColoredManhole):
         self.game = game
         self.game.start()
 
+
     def setInterpreter(self, klass=None, namespace={}):
         if namespace:
             self.updateNamespace(namespace)
         else:
             namespace = self.namespace
         self.interpreter = Interpreter(self, locals=namespace)
-        self.interpreter.game = self.game
+        self.interpreter.setGame(self.game)
+        self.game.setInterpreter(self.interpreter)
         # now that we know what's writing the data for the game, we can
         # register the component
         registry.registerComponent(

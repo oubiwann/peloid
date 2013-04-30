@@ -3,9 +3,9 @@ import sys
 from twisted.application import service, internet
 from twisted.python import usage
 
-from carapace.sdk import const, interfaces, registry, scripts
+from carapace.sdk import const as sshConst, interfaces, registry, scripts
 
-from peloid import config, meta
+from peloid import config, const, meta
 from peloid.app.shell.service import getGameShellFactory, getSetupShellFactory
 
 
@@ -23,34 +23,42 @@ class SubCommandOptions(usage.Options):
 class Options(usage.Options):
     """
     """
+    optParameters = [
+        [const.gamefileLongOption, const.gamefileShortOption, None,
+         ("The game file for the game you wish to run in PeloidMUD.")]
+        ]
     subCommands = [
-        [const.KEYGEN, None, SubCommandOptions,
+        [sshConst.KEYGEN, None, SubCommandOptions,
          "Generate ssh keys for the server"],
-        [const.SHELL, None, SubCommandOptions, "Login to the server"],
-        [const.STOP, None, SubCommandOptions, "Stop the server"],
+        [sshConst.SHELL, None, SubCommandOptions, "Login to the server"],
+        [sshConst.STOP, None, SubCommandOptions, "Stop the server"],
         ]
 
     def parseOptions(self, options):
         config = registry.getConfig()
         usage.Options.parseOptions(self, options)
         # check options
-        if self.subCommand == const.KEYGEN:
+        if self.subCommand == sshConst.KEYGEN:
             scripts.KeyGen()
             sys.exit(0)
-        elif self.subCommand == const.SHELL:
+        elif self.subCommand == sshConst.SHELL:
             scripts.ConnectToShell()
             sys.exit(0)
-        elif self.subCommand == const.STOP:
+        elif self.subCommand == sshConst.STOP:
             scripts.StopDaemon()
             sys.exit(0)
 
 
 def makeService(options):
+    # options
+    gameFile = options.get(const.gamefileLongOption)
+
     # primary setup
     application = service.Application(meta.description)
     services = service.IServiceCollection(application)
     # setup ssh for the game server
-    sshFactory = getGameShellFactory(app=application, services=services)
+    sshFactory = getGameShellFactory(
+        gameFile=gameFile, app=application, services=services)
     sshServer = internet.TCPServer(config.ssh.port, sshFactory)
     sshServer.setName(config.ssh.servicename)
     sshServer.setServiceParent(services)
