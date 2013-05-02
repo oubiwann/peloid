@@ -17,6 +17,7 @@ class SessionTransport(base.TerminalSessionTransport):
     def getHelpHint(self):
         msg = BANNER_HELP
         if self.game:
+            # XXX we need to do a better job of formatting here...
             msg += ("\n:\n: WARNING! You seem to have not provided a game "
                     "file with a command-line\n: option. To create a new "
                     "world, enter the Hall of Creators.")

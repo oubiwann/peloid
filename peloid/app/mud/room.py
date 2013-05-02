@@ -49,7 +49,7 @@ class Room(object):
 
     def onEnter(self):
     	pass
-    	
+
     def onExit(self):
     	pass
 
@@ -65,9 +65,9 @@ class Room(object):
     	self.onPassThreshold()
     	self.onExit()
 
-    
+
 class Hall(Room):
-	"""     
+	"""
 	"""
 
 
