@@ -19,6 +19,11 @@ $(KEY_DIR):
 $(VENV):
 	virtualenv $(VENV)
 
+generate-game-file:
+	# this make target needs to take game data files and create a custom zip
+	# file that can be loaded with "twistd peloid --game-file=filename"
+	echo
+
 deps:
 	. $(ACT) && pip install carapace
 	. $(ACT) && pip install txmongomodel
