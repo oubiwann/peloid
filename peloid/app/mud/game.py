@@ -13,8 +13,16 @@ class Game(object):
         self.mode = None
         self.parser = None
 
-    def start(self, *args, **kwargs):
+    def loadGame(self):
+        """
+        When the game is loaded, there will be a door/exit in the Hall of
+        Avatars, allowing one to enter the game world.
+        """
         pass
+
+    def start(self, *args, **kwargs):
+        if self.gameFile:
+            self.loadGame()
 
     def setMode(self, mode):
         """
