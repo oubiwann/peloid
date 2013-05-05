@@ -1,5 +1,5 @@
 *.sublime*
-.venv
+.venv*
 *.py[co]
 
 # Packages
