@@ -27,10 +27,12 @@ class CommandParser(object):
 
     def prepCommand(self, input=""):
         parts = input.lower().split()
-        self.command = parts[:1]
+        self.command = []
         self.rest = []
-        if len(parts) > 1:
-            self.rest = parts[1:]
+        if parts:
+            self.command = parts[0]
+            if len(parts) > 1:
+                self.rest = parts[1:]
 
     def parseCommand(self, input):
         self.prepCommand(input)

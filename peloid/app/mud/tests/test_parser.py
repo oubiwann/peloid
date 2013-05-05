@@ -1,6 +1,7 @@
 from twisted.trial import unittest
 
-from peloid.app.mud import parser
+from peloid import const
+from peloid.app.mud import game, parser
 
 
 class CommandParserTestCase(unittest.TestCase):
@@ -18,3 +19,46 @@ class CommandParserTestCase(unittest.TestCase):
         self.parser.prepCommand()
         self.assertEqual(self.parser.command, [])
         self.assertEqual(self.parser.rest, [])
+
+    def test_prepCommandSingle(self):
+        self.parser.prepCommand("word")
+        self.assertEqual(self.parser.command, "word")
+        self.assertEqual(self.parser.rest, [])
+
+    def test_prepCommandTwo(self):
+        self.parser.prepCommand("two words")
+        self.assertEqual(self.parser.command, "two")
+        self.assertEqual(self.parser.rest, ["words"])
+
+    def test_prepCommandMultiple(self):
+        self.parser.prepCommand("here are more words still")
+        self.assertEqual(self.parser.command, "here")
+        self.assertEqual(self.parser.rest, ['are', 'more', 'words', 'still'])
+
+    def test_parseHelp(self):
+        self.parser.parseCommand("help")
+        self.assertEqual(self.parser.command, "help")
+        self.assertEqual(self.parser.rest, [])
+        self.assertEqual(
+            self.parser.result,
+            "\n: This parser does not yet have 'help' information.")
+
+    def test_badCommand(self):
+        self.parser.parseCommand("wassup")
+        self.assertEqual(self.parser.result, parser.commandError)
+
+
+class ShellCommandParser(CommandParserTestCase):
+    """
+    """
+    def setUp(self):
+        self.parser = parser.ShellCommandParser()
+        # next we need to set the game attribute like a running mud server
+        # would have done:
+        self.parser.game = game.Game()
+        self.parser.game.setMode(const.modes.shell)
+
+    def test_parseEnter(self):
+        self.assertEqual(self.parser.game.mode, const.modes.shell)
+        self.parser.parseCommand("enter")
+        self.assertEqual(self.parser.game.mode, const.modes.lobby)
