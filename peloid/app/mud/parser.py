@@ -24,9 +24,10 @@ class CommandParser(object):
         else:
             return {"error": "Command not found."}
 
-    def cmd_go(self, direction):
-        pass
 
+class ObservingCommandParser(CommandParser):
+    """
+    """
     def cmd_look(self, at=""):
         # XXX get room description
         # XXX do a lookup on all contents in the room:
@@ -35,7 +36,14 @@ class CommandParser(object):
         return "You look around..."
 
 
-class HallsCommandParser(CommandParser):
+class MovingCommandParser(ObservingCommandParser):
+    """
+    """
+    def cmd_go(self, direction):
+        pass
+
+
+class HallsCommandParser(MovingCommandParser):
     """
     """
     def parseCommand(self, input):
