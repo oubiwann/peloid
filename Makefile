@@ -11,6 +11,8 @@ PACKAGE_NAME ?= $(shell $(PYTHON) -c "from peloid import meta; print meta.displa
 PACKAGE_EXT ?= tar.gz
 VENV ?= .venv
 ACT ?= $(VENV)/bin/activate
+TEST_VENV ?= .venv-test
+TEST_ACT ?= $(TEST_VENV)/bin/activate
 KEY_DIR ?= $(shell . $(ACT) && python -c "from peloid import config;print config.ssh.keydir;")
 
 $(KEY_DIR):
@@ -18,6 +20,9 @@ $(KEY_DIR):
 
 $(VENV):
 	virtualenv $(VENV)
+
+$(TEST_VENV):
+	virtualenv $(TEST_VENV)
 
 generate-game-file:
 	# this make target needs to take game data files and create a custom zip
@@ -84,33 +89,6 @@ clean:
 	rm -rf _trial_temp/ build/ dist/ MANIFEST \
 		CHECK_THIS_BEFORE_UPLOAD.txt *.egg-info
 
-push:
-	git push --all git@$(GITHUB_REPO)
-
-push-tags:
-	git push --tags git@$(GITHUB_REPO)
-
-push-all: push push-tags
-.PHONY: push-all
-
-stat:
-	@echo
-	@echo "### Git info ###"
-	@echo
-	git info
-	echo
-	@echo "### Git working branch status ###"
-	@echo
-	@git status -s
-	@echo
-	@echo "### Git branches ###"
-	@echo
-	@git branch
-	@echo 
-
-status: stat
-.PHONY: status
-
 todo:
 	git grep -n -i -2 XXX
 	git grep -n -i -2 TODO
@@ -120,46 +98,18 @@ build:
 	$(PYTHON) setup.py build
 	$(PYTHON) setup.py sdist
 
-build-docs:
-	cd docs/sphinx; make html
+check: $(TEST_VENV) test-deps build
+	. $(TEST_ACT) && trial $(LIB)
 
-check-docs: files = "README.rst"
-check-docs:
-	@echo "noop"
+test-deps:
+	. $(TEST_ACT) && pip install carapace
+	. $(TEST_ACT) && pip install txmongomodel
 
-check-examples: files = "examples/*.py"
-check-examples:
-	@echo "noop"
+clean-check:
+	rm -rf $(TEST_VENV)
 
-check-dist:
-	@echo "Need to fill this in ..."
-
-check: build check-docs check-examples
-	trial $(LIB)
-
-check-integration:
-# placeholder for integration tests
-.PHONY: check-integration
-
-virtual-deps:
-	sudo pip install virtualenv
-
-virtual-build: SUB_DIR ?= test-build
-virtual-build: DIR ?= $(VIRT_DIR)/$(SUB_DIR)
-virtual-build: clean build virtual-deps
-	mkdir -p $(VIRT_DIR)
-	-test -d $(DIR) || virtualenv $(DIR)
-	@. $(DIR)/bin/activate
-	-test -e $(DIR)/bin/twistd || $(DIR)/bin/pip install twisted
-	-test -e $(DIR)/bin/rst2html.py || $(DIR)/bin/pip install docutils
-	. $(DIR)/bin/activate && pip install ./dist/$(PACKAGE_NAME)*
-#	$(DIR)/bin/pip uninstall -vy $(PKG_NAME)
-
-clean-virt: clean
-	rm -rf $(VIRT_DIR)
-
-virtual-build-clean: clean-virt build virtual-build
-.PHONY: virtual-build-clean
+full-check: clean-check $(TEST_VENV) test-deps build
+	. $(TEST_ACT) && trial $(LIB)
 
 register:
 	$(PYTHON) setup.py register
