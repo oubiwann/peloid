@@ -37,9 +37,9 @@ class RoomTestCase(unittest.TestCase):
         self.room = TestRoom()
 
     def test_getDesc(self):
-        self.assertTrue(self.room.getDesc().startswith("\n\t"))
-        self.assertTrue(self.room.getDesc().endswith("\n\t"))
-        self.assertEqual(len(self.room.getDesc()), 293)
+        self.assertTrue(self.room.getDesc().startswith("\n    "))
+        self.assertTrue(self.room.getDesc().endswith("\n    "))
+        self.assertEqual(len(self.room.getDesc()), 308)
 
     def test_getDescEnter(self):
         self.assertEqual(
