@@ -6,6 +6,10 @@ from peloid.app.mud import parser, room, world
 
 class Game(object):
     """
+    Notes:
+     * the game object is instantiated by app.shell.service.getGameShellFactory
+     * app.shell.gameshell.TerminalRealm then sets the game attribute
+     * the game instance isn't started until a Manhole object is instantiated
     """
     def __init__(self, gameFile=None):
         self.gameFile = gameFile
@@ -26,6 +30,8 @@ class Game(object):
 
     def setMode(self, mode):
         """
+        The game mode is set by app.shell.service.getGameShellFactory.
+
         Legal modes are:
          * const.modes.lobby
          * const.modes.create
@@ -47,6 +53,8 @@ class Game(object):
         Each mode will have its own CommandParser.
         """
         self.mode = mode
+        if self.mode == const.modes.shell:
+            self.parser = parser.ShellCommandParser()
         if self.mode == const.modes.lobby:
             self.parser = parser.HallsCommandParser()
         elif self.mode == const.modes.create:

@@ -18,7 +18,7 @@ def getGameShellFactory(gameFile=None, **namespace):
     These two are passed in the call to peloid.app.service.makeService.
     """
     gameInstance = game.Game(gameFile)
-    gameInstance.setMode(const.modes.lobby)
+    gameInstance.setMode(const.modes.shell)
     sshRealm = gameshell.TerminalRealm(namespace, gameInstance)
     sshPortal = portal.Portal(sshRealm)
     factory = gameshell.GameShellFactory(sshPortal)

@@ -3,26 +3,53 @@ from twisted.python import log
 from peloid import const
 
 
+commandError = {"error": "Command not found."}
+shellError = """
+The command you entered did not make sense; please try again.
+
+To see a list of available commands, please type 'help' or '?'
+"""
+
+
 class CommandParser(object):
     """
     """
+    def __init__(self):
+        self.command = None
+        self.rest = None
+        self.result = None
+
     def prepCommand(self, input):
         parts = input.lower().split()
-        command = parts[0]
-        rest = []
+        self.command = parts[0]
+        self.rest = []
         if len(parts) > 1:
-            rest = parts[1:]
-        return (command, rest)
+            self.rest = parts[1:]
 
     def parseCommand(self, input):
-        command, rest = self.prepCommand(input)
-        if command in const.cmds.look:
-            return self.cmd_look(rest)
-        elif command in const.cmds.go:
-            # move player to room at given location
-            pass
+        self.prepCommand(input)
+        if self.command in const.cmds.help:
+            self.result = self.cmd_help(rest)
         else:
-            return {"error": "Command not found."}
+            self.result = commandError
+        return self.result
+
+    def isError(self):
+        if not isinstance(self.result, dict):
+            return False
+        if self.result.get("error"):
+            return True
+
+
+class ShellCommandParser(CommandParser):
+    """
+    """
+    def parseCommand(self, input):
+        super(ShellCommandParser, self).parseCommand(input)
+        if self.isError():
+            return shellError
+        else:
+            return self.result
 
 
 class ObservingCommandParser(CommandParser):
@@ -35,6 +62,16 @@ class ObservingCommandParser(CommandParser):
         #       do a lookup on that item and get is desc
         return "You look around..."
 
+    def parseCommand(self, input):
+        super(ObservingCommandParser, self).parseCommand(input)
+        if not self.isError():
+            return self.result
+        elif self.command in const.cmds.look:
+            self.result = self.cmd_look(self.rest)
+        else:
+            self.result = commandError
+        return self.result
+
 
 class MovingCommandParser(ObservingCommandParser):
     """
@@ -42,15 +79,28 @@ class MovingCommandParser(ObservingCommandParser):
     def cmd_go(self, direction):
         pass
 
+    def parseCommand(self, input):
+        super(MovingCommandParser, self).parseCommand(input)
+        if not self.isError():
+            return self.result
+        elif self.command in const.cmds.go:
+            # move player to room at given location
+            self.result = None
+        else:
+            self.result = commandError
+        return self.result
+
 
 class HallsCommandParser(MovingCommandParser):
     """
     """
     def parseCommand(self, input):
-        result = super(HallsCommandParser, self).parseCommand(input)
-        if result:
-            return result
-        command, rest = self.prepCommand(input)
+        super(HallsCommandParser, self).parseCommand(input)
+        if not self.isError():
+            return self.result
+        #elif self.command in const.cmds
+        else:
+            return commandError
 
 
 class CreatorsCommandParser(CommandParser):
