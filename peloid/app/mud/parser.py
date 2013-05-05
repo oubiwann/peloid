@@ -25,9 +25,9 @@ class CommandParser(object):
         self.rest = None
         self.result = None
 
-    def prepCommand(self, input):
+    def prepCommand(self, input=""):
         parts = input.lower().split()
-        self.command = parts[0]
+        self.command = parts[:1]
         self.rest = []
         if len(parts) > 1:
             self.rest = parts[1:]
