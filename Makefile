@@ -34,13 +34,16 @@ deps:
 	. $(ACT) && pip install txmongomodel
 
 run: $(VENV) $(KEY_DIR) deps
-	. $(ACT) && twistd -n peloid
+	@clear
+	@. $(ACT) && twistd -n peloid
 
 daemon: $(VENV) $(KEY_DIR) deps
+	@clear
 	@echo "Starting daemon ..."
 	@. $(ACT) && twistd peloid
 
 shell: $(VENV) $(KEY_DIR)
+	@clear
 	@echo "Starting shell ..."
 	@. $(ACT) && ssh -o StrictHostKeyChecking=no -p 4222 127.0.0.1
 
@@ -99,7 +102,8 @@ build:
 	$(PYTHON) setup.py sdist
 
 check: $(TEST_VENV) test-deps build
-	. $(TEST_ACT) && trial $(LIB)
+	@clear
+	@. $(TEST_ACT) && trial $(LIB)
 
 test-deps:
 	. $(TEST_ACT) && pip install carapace
