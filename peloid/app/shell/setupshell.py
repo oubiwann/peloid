@@ -90,7 +90,7 @@ class SetupShell(ExecutingShell):
     telnet_q = telnet_quit
 
     def telnet_help(self, *args):
-        self.write(config.telnet.registration)
+        self.write(config.telnet.registration + "\n\n")
         self.prompt()
 
     telnet_h = telnet_help
