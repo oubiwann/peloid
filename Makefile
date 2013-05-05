@@ -97,6 +97,9 @@ todo:
 	git grep -n -i -2 TODO
 .PHONY: todo
 
+find-tabs:
+	@-find . -name "*.py"|egrep -v '.venv'|xargs egrep '\t'
+
 build:
 	$(PYTHON) setup.py build
 	$(PYTHON) setup.py sdist
