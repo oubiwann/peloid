@@ -1,5 +1,5 @@
 class Organizer(object):
-	pass
+    pass
 
 
 # Game Modes

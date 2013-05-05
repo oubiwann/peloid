@@ -11,7 +11,7 @@ class Room(object):
     exits = []
 
     def getDesc(self):
-    	return self.__doc__
+        return self.__doc__
 
     def getDescItems(self):
         """
@@ -28,10 +28,10 @@ class Room(object):
         # XXX do a database lookup for players in the room
 
     def getDescEnter(self):
-    	return self.onEnterText
+        return self.onEnterText
 
     def getDescExit(self):
-    	return self.onExitText
+        return self.onExitText
 
     def getExitsText(self):
         exits = ", ".join(self.exits[:-1])
@@ -39,36 +39,36 @@ class Room(object):
             exits, self.exits[-1])
 
     def onEnter(self):
-    	pass
+        pass
 
     def onOpenDoor(self):
-    	pass
+        pass
 
     def onPassThreshold(self):
-    	pass
+        pass
 
     def onEnter(self):
-    	pass
+        pass
 
     def onExit(self):
-    	pass
+        pass
 
     def enter(self):
-    	# XXX write getDescEnter to the user's shell
-    	self.onOpenDoor()
-    	self.onPassThreshold()
-    	self.onEnter()
+        # XXX write getDescEnter to the user's shell
+        self.onOpenDoor()
+        self.onPassThreshold()
+        self.onEnter()
 
     def exit(self):
-    	# XXX write getDescExit to the user's shell
-    	self.onOpenDoor()
-    	self.onPassThreshold()
-    	self.onExit()
+        # XXX write getDescExit to the user's shell
+        self.onOpenDoor()
+        self.onPassThreshold()
+        self.onExit()
 
 
 class Hall(Room):
-	"""
-	"""
+    """
+    """
 
 
 class HallOfHalls(Hall):
