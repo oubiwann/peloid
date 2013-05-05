@@ -3,6 +3,8 @@ from twisted.conch import manhole_ssh
 from carapace.app.shell import base
 from carapace.sdk import interfaces, registry
 
+from peloid import util
+
 
 config = registry.getConfig()
 
@@ -11,6 +13,7 @@ noGameWorldLoginWarningTemplate = """
  WARNING! You seem to have not provided a game file with a command-line
  option. To create a new world, enter the Hall of Creators.
 """
+
 
 class SessionTransport(base.TerminalSessionTransport):
     """
@@ -35,6 +38,7 @@ class TerminalSession(base.ExecutingTerminalSession):
 
     def openShell(self, proto):
         base.ExecutingTerminalSession.openShell(self, proto)
+        self.username = util.getUsernameFromAdaptor(self.original)
 
 
 class TerminalRealm(base.ExecutingTerminalRealm):
