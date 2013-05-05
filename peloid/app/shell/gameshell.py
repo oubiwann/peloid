@@ -15,13 +15,18 @@ class SessionTransport(base.TerminalSessionTransport):
     """
     """
     def getHelpHint(self):
+        # XXX instead of pulling in a generic banner help string, get the help
+        # for the instantiated command parser
         msg = BANNER_HELP
+        msg = self.game.parser.getHelp()
+        newLine = self.game.parser.getNewline
+        # XXX there's no actual check here for a running world
         if self.game:
             # XXX we need to do a better job of formatting here...
-            msg += ("\n:\n: WARNING! You seem to have not provided a game "
-                    "file with a command-line\n: option. To create a new "
+            msg += ("%s WARNING! You seem to have not provided a game "
+                    "file with a command-line%s option. To create a new "
                     "world, enter the Hall of Creators.")
-        return msg
+        return msg % (newLine(2), newLine())
 
 
 class TerminalSession(base.ExecutingTerminalSession):

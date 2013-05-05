@@ -21,11 +21,17 @@ class MetaWorld(World):
             |         |              |          |           |
             |         |              |          |           |
             +---------+--------------+----------+-----------+
-                                     |
-                               Hall of Halls
+                 .                   |
+                 .             Hall of Halls
+                 .
+            Shell Portal
+
 
     From these rooms, one is able to interact with the game world in several
     different and separate ways.
+
+    If a player has system rights, a shell portal will be added as an exit. The
+    shell portal will dump the player into the PeloidMUD shell interface.
 
     When a player leaves one world for another (or leaves the PeloidMUD shell
     for a world), the namespace that one is leaving needs to be saved and

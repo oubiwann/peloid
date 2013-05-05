@@ -13,6 +13,12 @@ To see a list of available commands, please type 'help' or '?'
 
 class CommandParser(object):
     """
+    CommandParser subclasses are instantiated by the game when the game mode is
+    set. The game mode is determined by the app.shell.service.getGameShellFactory
+    function.
+
+    Any object that has access to the game instance has acces to the parser
+    instance (e.g., via game.parser).
     """
     def __init__(self):
         self.command = None
@@ -29,7 +35,7 @@ class CommandParser(object):
     def parseCommand(self, input):
         self.prepCommand(input)
         if self.command in const.cmds.help:
-            self.result = self.cmd_help(rest)
+            self.result = self.cmd_help()
         else:
             self.result = commandError
         return self.result
@@ -39,6 +45,17 @@ class CommandParser(object):
             return False
         if self.result.get("error"):
             return True
+
+    def getNewline(self, count=1):
+        return "\n:" * count
+
+    def getHelp(self):
+        return "%s This parser does not yet have 'help' information." % (
+            self.getNewline())
+
+    def cmd_help(self):
+        if not self.rest:
+            return self.getHelp()
 
 
 class ShellCommandParser(CommandParser):
@@ -55,11 +72,13 @@ class ShellCommandParser(CommandParser):
 class ObservingCommandParser(CommandParser):
     """
     """
-    def cmd_look(self, at=""):
+    def cmd_look(self):
         # XXX get room description
         # XXX do a lookup on all contents in the room:
         #   if the first word in "at" is in the contents,
         #       do a lookup on that item and get is desc
+        if self.rest:
+            return "You look at %s" % str(self.rest)
         return "You look around..."
 
     def parseCommand(self, input):
@@ -67,7 +86,7 @@ class ObservingCommandParser(CommandParser):
         if not self.isError():
             return self.result
         elif self.command in const.cmds.look:
-            self.result = self.cmd_look(self.rest)
+            self.result = self.cmd_look()
         else:
             self.result = commandError
         return self.result
@@ -76,8 +95,10 @@ class ObservingCommandParser(CommandParser):
 class MovingCommandParser(ObservingCommandParser):
     """
     """
-    def cmd_go(self, direction):
-        pass
+    def cmd_go(self):
+        if not self.rest:
+            return "Where do you want to go?"
+        return "You go %s ..." % self.rest
 
     def parseCommand(self, input):
         super(MovingCommandParser, self).parseCommand(input)
