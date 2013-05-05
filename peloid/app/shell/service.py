@@ -17,6 +17,10 @@ def getGameShellFactory(gameFile=None, **namespace):
 
     These two are passed in the call to peloid.app.service.makeService.
     """
+    # XXX can we determine level of permission a user will have at this point?
+    # XXX if so, we need to only use shell mode for those with system-level
+    # perms, and hall of halls for everyone else... except anonymous users: they
+    # can get dumped into hall of observing...
     gameInstance = game.Game(gameFile)
     gameInstance.setMode(const.modes.shell)
     sshRealm = gameshell.TerminalRealm(namespace, gameInstance)

@@ -63,10 +63,19 @@ class ShellCommandParser(CommandParser):
     """
     def parseCommand(self, input):
         super(ShellCommandParser, self).parseCommand(input)
-        if self.isError():
-            return shellError
-        else:
+        if not self.isError():
             return self.result
+        elif self.command in const.cmds.enter:
+            self.result = self.cmd_enter()
+            return self.result
+        else:
+            return shellError
+
+    def cmd_enter(self):
+        self.game.setMode(const.modes.lobby)
+        # XXX the new mode corresponds to a new room being entered; the player
+        # needs to be moved here, and upon entering, the room description
+        # needs to be displayed
 
 
 class ObservingCommandParser(CommandParser):

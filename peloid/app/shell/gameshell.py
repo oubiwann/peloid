@@ -6,27 +6,23 @@ from carapace.sdk import interfaces, registry
 
 config = registry.getConfig()
 
+noGameWorldLoginWarningTemplate = """
 
-# XXX move this into config.ssh
-BANNER_HELP = "This shell has no commands; it simply returns what you type."
-
+ WARNING! You seem to have not provided a game file with a command-line
+ option. To create a new world, enter the Hall of Creators.
+"""
 
 class SessionTransport(base.TerminalSessionTransport):
     """
     """
     def getHelpHint(self):
-        # XXX instead of pulling in a generic banner help string, get the help
-        # for the instantiated command parser
-        msg = BANNER_HELP
-        msg = self.game.parser.getHelp()
-        newLine = self.game.parser.getNewline
+        parser = self.game.parser
+        msg = parser.getHelp()
         # XXX there's no actual check here for a running world
         if self.game:
-            # XXX we need to do a better job of formatting here...
-            msg += ("%s WARNING! You seem to have not provided a game "
-                    "file with a command-line%s option. To create a new "
-                    "world, enter the Hall of Creators.")
-        return msg % (newLine(2), newLine())
+            msg += noGameWorldLoginWarningTemplate.replace(
+                "\n", parser.getNewline())
+        return msg
 
 
 class TerminalSession(base.ExecutingTerminalSession):

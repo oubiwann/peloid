@@ -19,6 +19,7 @@ cmds = Organizer()
 cmds.look = ["look", "view", "observe"]
 cmds.go = ["walk", "move", "go"]
 cmds.help = ["h", "help", "?"]
+cmds.enter = ["enter"]
 
 
 # Options

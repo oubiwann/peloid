@@ -69,6 +69,7 @@ class Game(object):
             self.parser = parser.ViewingCommandParser()
         elif self.mode == const.modes.chat:
             self.parser = parser.BanalityCommandParser()
+        self.parser.game = self
 
     def parseCommand(self, input):
         return self.parser.parseCommand(input)
