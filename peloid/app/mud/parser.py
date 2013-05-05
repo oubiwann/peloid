@@ -19,6 +19,9 @@ class CommandParser(object):
 
     Any object that has access to the game instance has acces to the parser
     instance (e.g., via game.parser).
+
+    The point of interaction between the command parsing classes and the players
+    is the .parserCommand method. See its docstring for more details.
     """
     def __init__(self):
         self.command = None
@@ -35,12 +38,30 @@ class CommandParser(object):
                 self.rest = parts[1:]
 
     def parseCommand(self, input):
+        """
+        The user interacts with the MUD, regardless of shell/game/metagame, via
+        commands typed in the MUD. Similarly, the only way for the MUD to relate
+        to the player is by the results it sends back after parsing commands
+        from the player.
+
+        As such: anything that needs to be updated or presented to the user
+        needs to be sent as part of the results that the user gets from the
+        parseCommand call.
+
+        If the game changes state in anyway that the user needs to be presented
+        with such state info, the parseCommand results are where that info needs
+        to be shared. Therefore, part of the parseCommand functionality needs to
+        be the querying of a queue for user messages and the presnetation of
+        those messages.
+        """
         self.prepCommand(input)
         if self.command in const.cmds.help:
             self.result = self.cmd_help()
         else:
             self.result = commandError
-        return self.result
+        # poll queue and get data to return to the user, if any
+        queueResults = ""
+        return self.result + queueResults
 
     def isError(self):
         if not isinstance(self.result, dict):
