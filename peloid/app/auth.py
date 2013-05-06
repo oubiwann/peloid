@@ -10,8 +10,9 @@ class SSHPublicKeyDatabase(checkers.SSHPublicKeyDatabase):
 class SSHPortal(portal.Portal):
     """
     """
-    def __init__(self, *args, **kwargs):
-        portal.Portal.__init__(self, *args, **kwargs)
+    def __init__(self, realm):
+        portal.Portal.__init__(self, realm)
+        self._peloid_realm = realm
         self._peloid_checker = None
         self._peloid_creds = None
 
