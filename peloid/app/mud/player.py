@@ -1,6 +1,7 @@
 class Player(object):
     """
     """
+    name = None
 
 
 class ShellPlayer(Player):
