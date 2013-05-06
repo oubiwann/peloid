@@ -9,6 +9,10 @@ class CommandParserTestCase(unittest.TestCase):
     """
     def setUp(self):
         self.parser = parser.CommandParser()
+        # next we need to set the game attribute like a running mud server
+        # would have done:
+        self.parser.game = game.Game()
+        self.parser.game.setMode(const.modes.lobby)
 
     def test_init(self):
         self.assertEqual(self.parser.command, None)
@@ -42,6 +46,10 @@ class CommandParserTestCase(unittest.TestCase):
         self.assertEqual(
             self.parser.result,
             "\n: This parser does not yet have 'help' information.")
+
+    def test_parseEmote(self):
+        self.parser.parseCommand("me looks at his watch")
+        self.assertEqual(self.parser.result, "None looks at his watch")
 
     def test_badCommand(self):
         self.parser.parseCommand("wassup")

@@ -20,6 +20,7 @@ cmds.look = ["look", "view", "observe"]
 cmds.go = ["walk", "move", "go"]
 cmds.help = ["h", "help", "?"]
 cmds.enter = ["enter"]
+cmds.emote = ["me", "em", "emote", "act"]
 
 
 # Options

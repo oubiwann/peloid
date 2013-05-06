@@ -57,11 +57,17 @@ class CommandParser(object):
         self.prepCommand(input)
         if self.command in const.cmds.help:
             self.result = self.cmd_help()
+        elif self.command in const.cmds.emote:
+            self.result = self.cmd_emote()
         else:
             self.result = commandError
-        # poll queue and get data to return to the user, if any
+        # XXX poll queue and get data to return to the user, if any
+        # hopefully we can use a msg system that pushes, so we don't need to pull
         queueResults = ""
-        return self.result + queueResults
+        result = self.result
+        if not self.isError():
+            result += queueResults
+        return result
 
     def isError(self):
         if not isinstance(self.result, dict):
@@ -79,6 +85,14 @@ class CommandParser(object):
     def cmd_help(self):
         if not self.rest:
             return self.getHelp()
+
+    def cmd_emote(self):
+        msg = "%s %s" % (self.game.player.name, " ".join(self.rest))
+        # XXX send the message to the room queue that the player is in so that
+        # all participants recieve it
+        # XXX for now, do something silly, just return the message so that the
+        # single user sees it
+        return msg
 
 
 class ShellCommandParser(CommandParser):
@@ -171,7 +185,7 @@ class AvatarsCommandParser(CommandParser):
     """
 
 
-class WordCommandParser(CommandParser):
+class WorldCommandParser(CommandParser):
     """
     """
 
