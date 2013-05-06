@@ -1,4 +1,4 @@
-from ConfigParser import SafeConfigParser, NoSectionError
+from ConfigParser import SafeConfigParser, NoSectionError, NoOptionError
 import os
 
 from zope.interface import moduleProvides
@@ -30,6 +30,7 @@ ssh.port = 4222
 ssh.keydir = os.path.join(main.config.datadir, "ssh")
 ssh.userdirtemplate = os.path.join(main.config.datadir, "users", "{{USER}}")
 ssh.userauthkeys = os.path.join(ssh.userdirtemplate, "authorized_keys")
+ssh.welcome = "Hello, {{NAME}}! You have entered a PeloidMUD Server."
 ssh.banner = """:
 : Welcome to
 : ____        ___                   __           __  __  ____
@@ -40,7 +41,7 @@ ssh.banner = """:
 :   \ \_\ \____\/\____\ \____/\ \_\ \___,_\ \_\\\\ \_\ \_____\ \____/
 :    \/_/\/____/\/____/\/___/  \/_/\/__,_ /\/_/ \/_/\/_____/\/___/
 :
-: You have entered a PeloidMUD Server.
+: {{WELCOME}}
 : {{HELP}}
 :
 : Enjoy!
@@ -100,6 +101,7 @@ class PeloidMUDConfigurator(Configurator):
         config.set("Telnet", "registration", self.telnet.registration)
         config.set("Telnet", "prompt", self.telnet.prompt)
         config.set("Telnet", "bye", self.telnet.bye)
+        config.set("SSH", "welcome", self.ssh.welcome)
         return config
 
     def updateConfig(self):
@@ -120,6 +122,8 @@ class PeloidMUDConfigurator(Configurator):
         telnet.registration = config.get("Telnet", "registration")
         telnet.prompt = config.get("Telnet", "prompt")
         telnet.bye = config.get("Telnet", "bye")
+        ssh = self.ssh
+        ssh.welcome = config.get("SSH", "welcome")
         return config
 
 
@@ -131,6 +135,6 @@ def updateConfig():
     configurator = configuratorFactory()
     try:
         configurator.updateConfig()
-    except NoSectionError:
+    except (NoSectionError, NoOptionError):
         print ("It seems like your config file is stale; "
                "you should generate a new one.")
