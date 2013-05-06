@@ -18,6 +18,19 @@ noGameWorldLoginWarningTemplate = """
 class SessionTransport(base.TerminalSessionTransport):
     """
     """
+    def writeMOTD(self):
+        # XXX once termProto and self.terminal are set in the super class, we
+        # can remove them from here
+        termProto = self.chainedProtocol.terminalProtocol
+        self.terminal = termProto.terminal
+        motd = config.ssh.banner.replace("{{HELP}}", self.getHelpHint())
+        motd = motd.replace("{{WELCOME}}", self.getWelcome())
+        self.terminal.write("\r\n" + motd + "\r\n")
+        self.terminal.write(termProto.ps[termProto.pn])
+
+    def getWelcome(self):
+        return config.ssh.welcome.replace("{{NAME}}", self.username)
+
     def getHelpHint(self):
         parser = self.game.parser
         msg = parser.getHelp()
@@ -37,8 +50,11 @@ class TerminalSession(base.ExecutingTerminalSession):
         pass
 
     def openShell(self, proto):
+        username = util.getUsernameFromAdaptor(self.original)
+        self.transportFactory.username = username
+        self.realm.setUsername(username)
+        self.realm.getGame().updateActiveUsers(username)
         base.ExecutingTerminalSession.openShell(self, proto)
-        self.username = util.getUsernameFromAdaptor(self.original)
 
 
 class TerminalRealm(base.ExecutingTerminalRealm):
@@ -48,19 +64,26 @@ class TerminalRealm(base.ExecutingTerminalRealm):
     transportFactory = SessionTransport
 
     def __init__(self, namespace, game):
+        self._peloid_game = game
+        self._peloid_username = None
         base.ExecutingTerminalRealm.__init__(self, namespace)
         self.transportFactory.game = game
+        self.sessionFactory.realm = self
 
         def getManhole(serverProtocol):
             return Manhole(game, namespace)
 
         self.chainedProtocolFactory.protocolFactory = getManhole
 
+    def getGame(self):
+        return self._peloid_game
+
+    def setUsername(self, username):
+        self._peloid_username = username
+
 
 class Interpreter(base.Interpreter):
     """
-    A simple interpreter that demonstrate where one can plug in any
-    command-parsing shell.
     """
     def runsource(self, input, filename):
         #self.write("input = %s, filename = %s" % (input, filename))

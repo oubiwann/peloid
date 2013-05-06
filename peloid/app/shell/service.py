@@ -19,7 +19,7 @@ def getGameShellFactory(gameFile=None, **namespace):
     # XXX if so, we need to only use shell mode for those with system-level
     # perms, and hall of halls for everyone else... except anonymous users: they
     # can get dumped into hall of observing...
-    gameInstance = game.Game(gameFile)
+    gameInstance = game.SingleUserGame(gameFile)
     gameInstance.setMode(const.modes.shell)
     sshRealm = gameshell.TerminalRealm(namespace, gameInstance)
     sshPortal = auth.SSHPortal(sshRealm)

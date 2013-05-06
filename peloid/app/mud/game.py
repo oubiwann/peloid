@@ -1,7 +1,14 @@
 from twisted.python import log
 
 from peloid import const
-from peloid.app.mud import parser, room, world
+from peloid.app.mud import parser, player, room, world
+
+
+# XXX it might be better to unify this with the user model ...
+class User(object):
+
+    def __init__(self, username, session, roles):
+        pass
 
 
 class Game(object):
@@ -11,11 +18,12 @@ class Game(object):
      * app.shell.gameshell.TerminalRealm then sets the game attribute
      * the game instance isn't started until a Manhole object is instantiated
     """
-    def __init__(self, gameFile=None):
+    def __init__(self, gameFile=None, player=None):
         self.gameFile = gameFile
         # XXX also, load game here
         self.mode = None
         self.parser = None
+        self.player = player
 
     def loadGame(self):
         """
@@ -53,7 +61,9 @@ class Game(object):
         Each mode will have its own CommandParser.
         """
         self.mode = mode
+        playerClass = player.MetaPlayer
         if self.mode == const.modes.shell:
+            playerClass = player.ShellPlayer
             self.parser = parser.ShellCommandParser()
         if self.mode == const.modes.lobby:
             self.parser = parser.HallsCommandParser()
@@ -64,11 +74,15 @@ class Game(object):
         elif self.mode == const.modes.avatar:
             self.parser = parser.AvatarsCommandParser()
         elif self.mode == const.modes.play:
-            self.parser = parser.WordCommandParser()
+            playerClass = player.GamePlayer
+            self.parser = parser.WorldCommandParser()
         elif self.mode == const.modes.observe:
             self.parser = parser.ViewingCommandParser()
         elif self.mode == const.modes.chat:
             self.parser = parser.BanalityCommandParser()
+        # XXX pass the User instance to the playerClass once the User class is
+        # finished
+        self.player = playerClass()
         self.parser.game = self
 
     def parseCommand(self, input):
@@ -79,3 +93,32 @@ class Game(object):
         This is inteded to be called by gameshell.Manhole.setInterpreter.
         """
         self.interpreter = interpreter
+
+    def updateActiveUsers(self, username):
+        pass
+
+
+class SingleUserGame(Game):
+    """
+    """
+    def __init__(self, *args, **kwargs):
+        super(SingleUserGame, self).__init__(*args, **kwargs)
+        self.activeUsername = ""
+        self.activeSession = ""
+        self.activeUserRoles = ""
+
+    def  updateActiveUsers(self, username):
+        self.activeUsername = username
+
+
+class MultiUserGame(Game):
+    """
+    """
+    def updateActiveUsers(self, username):
+        # XXX update the users collection in mongodb
+        # XXX for each user, the game will need:
+        #   * a reference to their session (so that it can write messages to
+        #     the players)
+        #   * the roles that this user has permissions to exercise (probably a
+        #     database lookup)
+        pass
