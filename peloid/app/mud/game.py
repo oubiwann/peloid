@@ -4,13 +4,6 @@ from peloid import const
 from peloid.app.mud import parser, player, room, world
 
 
-# XXX it might be better to unify this with the user model ...
-class User(object):
-
-    def __init__(self, username, session, roles):
-        pass
-
-
 class Game(object):
     """
     Notes:
@@ -97,6 +90,16 @@ class Game(object):
     def updateActiveUsers(self, username):
         pass
 
+    def getUserTerminal(self, username):
+        # XXX lookup user data, return user.terminal
+
+    def getUserRoles(self, username):
+        # XXX lookup user data, return user.roles
+
+    def sendUserMessage(self, username, message):
+        self.getUserTerminal().write(message)
+
+
 
 class SingleUserGame(Game):
     """
@@ -107,7 +110,7 @@ class SingleUserGame(Game):
         self.activeSession = ""
         self.activeUserRoles = ""
 
-    def  updateActiveUsers(self, username):
+    def updateActiveUsers(self, username):
         self.activeUsername = username
 
 

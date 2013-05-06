@@ -4,6 +4,7 @@ from carapace.app.shell import base
 from carapace.sdk import interfaces, registry
 
 from peloid import util
+from peloid.app import auth
 
 
 config = registry.getConfig()
@@ -18,6 +19,15 @@ noGameWorldLoginWarningTemplate = """
 class SessionTransport(base.TerminalSessionTransport):
     """
     """
+    def sessionInit(self):
+        # XXX this method isn't used yet ... see the following tickets:
+        #  * https://github.com/oubiwann/peloid/issues/32
+        #  * https://github.com/oubiwann/carapace/issues/3
+        # XXX do a db lookup to get roles
+        roles = []
+        user = auth.User(self.username, self.terminal, roles)
+        self.game.updateActiveUsers(user)
+
     def writeMOTD(self):
         # XXX once termProto and self.terminal are set in the super class, we
         # can remove them from here

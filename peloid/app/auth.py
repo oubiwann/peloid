@@ -2,6 +2,16 @@ from twisted.conch import checkers
 from twisted.cred import portal
 
 
+# XXX it might be better to unify this with the user model ...
+class User(object):
+    """
+    """
+    def __init__(self, username, terminal, roles):
+        self.username = username
+        self.terminal = terminal
+        self.roles = roles
+
+
 class SSHPublicKeyDatabase(checkers.SSHPublicKeyDatabase):
     """
     """
