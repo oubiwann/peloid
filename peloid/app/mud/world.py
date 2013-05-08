@@ -74,6 +74,10 @@ class World(object):
       * peloid.app.data.common
       * peloid.app.data.bus
       * peloid.app.data.storage
+
+    The nex step is, for each message type, identifying the appropriate Redis
+    data type to use. At which point, abstractions will be ready to be created
+    and the experimentation can begin in earnest.
     """
 
 
