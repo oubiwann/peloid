@@ -5,6 +5,23 @@ from peloid import const
 
 class World(object):
     """
+    The big question around how the world works is communication:
+     * how do users/players in a room know that someone new has entered the
+       room?
+     * how does everyone in a room hear someone say something?
+     * how does one user hear another user whisper to them?
+     * how does a room know what contents it has?
+     * when a user enters a room, what do they see or hear? How do they get this
+       info/message(s)?
+
+    The general answer to all of these is "messaging". Redis provides for both
+    storage needs as well as Peloid's messaging needs, so we're uring the
+    txRedis package. Redis is a key-value store, where keys can be arbitrarily
+    constructed namespaces (in particular, strings with an arbitrary separator).
+
+    Part of the design of Peloid's messaging system will be the definition of
+    these keys, the parsing of them, the extraction of the associated values,
+    and the planned routing for said messages.
     """
 
 
