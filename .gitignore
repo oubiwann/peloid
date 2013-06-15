@@ -31,3 +31,8 @@ pip-log.txt
 twistd.*
 dropin.cache
 _trial_temp
+
+# lfe
+*.beam
+.eunit
+deps
